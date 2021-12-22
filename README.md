@@ -1,4 +1,4 @@
-# blockchain-visualized
+# Blockchain-Visualized-UI
 
 ## Project setup
 ```
