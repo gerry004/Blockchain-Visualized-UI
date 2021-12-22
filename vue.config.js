@@ -1,5 +1,5 @@
 module.exports = {
-  publicPath: '/Blockchain-Visualized/',
+  publicPath: '/Blockchain-Visualized-UI/',
   transpileDependencies: [
     'vuetify'
   ]

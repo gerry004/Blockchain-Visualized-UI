@@ -11,17 +11,17 @@ const getters = {
 };
 
 const actions = {
-  async getHello({ commit }) { 
-    console.log('getHello route')
-    await api.get('/hello')
+  async computeHash({ commit }) { 
+    console.log('computeHash route')
+    await api.post('/crypto/hash', { data: 'string data' })
       .then((response) => {
         console.log(response, response.data)
         commit('setData', response.data)
       })
   },
-  async getHelloCrypto({ commit }) {
-    console.log('getHelloCryptoRoute')
-    await api.get('/crypto/hello-crypto')
+  async generateKeyPair({ commit }) {
+    console.log('generateKeyPair route')
+    await api.get('/crypto/generate-key-pair')
     .then((response) => {
       console.log(response, response.data)
       commit('setData', response.data)
