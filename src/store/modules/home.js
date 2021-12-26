@@ -3,35 +3,40 @@ import { api } from '@/api'
 const namespaced = true;
 
 const state = {
-  data: {}
+  data: {},
+  account: {
+    balance: null,
+    public: null,
+    private: null
+  }
 };
 
 const getters = {
-  data: state => state.data
+  data: state => state.data,
+  account: state => state.account
 };
 
 const actions = {
+  async createAccount({ commit }) {
+    await api.post('/crypto/create-account', {passphrase: 'passphrase'})
+      .then((response) => {
+        commit('setAccount', response.data)
+      })
+  },
   async computeHash({ commit }) { 
-    console.log('computeHash route')
     await api.post('/crypto/hash', { data: 'string data' })
       .then((response) => {
-        console.log(response, response.data)
         commit('setData', response.data)
       })
   },
-  async generateKeyPair({ commit }) {
-    console.log('generateKeyPair route')
-    await api.get('/crypto/generate-key-pair')
-    .then((response) => {
-      console.log(response, response.data)
-      commit('setData', response.data)
-    })
-  }
 };
 
 const mutations = {
   setData(state, data) {
     state.data = data
+  },
+  setAccount(state, data) {
+    state.account = data
   }
 };
 

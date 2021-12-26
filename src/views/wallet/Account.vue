@@ -1,16 +1,16 @@
 <template>
   <wallet-layout>
     <v-card>
-      <v-card-title>Balance: 1,000 ETH</v-card-title>
+      <v-card-title>Balance: {{ account.balance }}</v-card-title>
       <v-card-text>
-        <p>Public Address: some encryption key</p>
-        <p>Private Key: don't show this to anyone</p>
+        <p>Public Address: {{ account.public }}</p>
+        <p>Private Key: {{ account.private }}</p>
       </v-card-text>
       <v-card-actions>
         <v-btn text outlined>Send</v-btn>
         <v-btn text outlined>Receive</v-btn>
-        <v-btn @click="generateKeyPair()" text outlined>GenKeyPair</v-btn>
         <v-btn @click="computeHash()" text outlined>Compute Hash</v-btn>
+        <v-btn @click="createAccount()" text outlined>create account</v-btn>
       </v-card-actions>
     </v-card>
   </wallet-layout>
@@ -18,31 +18,20 @@
 
 <script>
 import WalletLayout from "@/components/WalletLayout.vue"
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 
 export default {
   name: 'Account',
   components: { WalletLayout },
-  data: () => ({
-    blocks: [
-      {
-        previous: "hash of block 1",
-        data: 'data',
-        next: 'hash of block 2',
-        color: 'error'
-      },
-      {
-        previous: "0000000000",
-        data: 'data',
-        next: 'hash of block 1',
-        color: 'success'
-      },
-    ]
-  }),
+  computed: {
+    ...mapGetters({
+      account: 'home/account'
+    })
+  },
   methods: {
     ...mapActions({
-      computeHash: 'home/computeHash',
-      generateKeyPair: 'home/generateKeyPair'
+      createAccount: 'home/createAccount',
+      computeHash: 'home/computeHash'
     })
   }
 }
