@@ -43,12 +43,7 @@
               <v-list dense>
                 <v-list-item>
                   <v-list-item-content>
-                    {{ item.publicAddress }}
-                  </v-list-item-content>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    {{ item.privateKey }}
+                    Public Address: {{ item.publicKey }}
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -61,43 +56,33 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        search: '',
-        filter: {},
-        accounts: [
-          {
-            balance: "1000 ETH",
-            publicAddress: "publicAddress11",
-            privateKey: "privateKey11"
-          },
-          {
-            balance: "1000 ETH",
-            publicAddress: "publicAddress11",
-            privateKey: "privateKey11"
-          }
-        ]
-      }
+import { mapGetters } from "vuex"
+export default {
+  data: () => ({
+    search: '',
+    filter: {}
+  }),
+  computed: {
+    ...mapGetters({
+      accounts: 'home/accounts'
+    }),
+    numberOfPages () {
+      return Math.ceil(this.items.length / this.itemsPerPage)
     },
-    computed: {
-      numberOfPages () {
-        return Math.ceil(this.items.length / this.itemsPerPage)
-      },
-      filteredKeys () {
-        return this.keys.filter(key => key !== 'Name')
-      },
+    filteredKeys () {
+      return this.keys.filter(key => key !== 'Name')
     },
-    methods: {
-      nextPage () {
-        if (this.page + 1 <= this.numberOfPages) this.page += 1
-      },
-      formerPage () {
-        if (this.page - 1 >= 1) this.page -= 1
-      },
-      updateItemsPerPage (number) {
-        this.itemsPerPage = number
-      },
+  },
+  methods: {
+    nextPage () {
+      if (this.page + 1 <= this.numberOfPages) this.page += 1
     },
-  }
+    formerPage () {
+      if (this.page - 1 >= 1) this.page -= 1
+    },
+    updateItemsPerPage (number) {
+      this.itemsPerPage = number
+    },
+  },
+}
 </script>

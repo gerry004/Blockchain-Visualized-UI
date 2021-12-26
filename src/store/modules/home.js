@@ -4,6 +4,7 @@ const namespaced = true;
 
 const state = {
   data: {},
+  accounts: [], //list of objects with balance and public keys
   account: {
     balance: null,
     public: null,
@@ -13,7 +14,8 @@ const state = {
 
 const getters = {
   data: state => state.data,
-  account: state => state.account
+  account: state => state.account,
+  accounts: state => state.accounts
 };
 
 const actions = {
@@ -29,6 +31,12 @@ const actions = {
         commit('setData', response.data)
       })
   },
+  async getAccounts({ commit }) {
+    await api.get('crypto/accounts')
+      .then((response) => {
+        commit('setAccounts', response.data)
+      })
+  }
 };
 
 const mutations = {
@@ -37,6 +45,9 @@ const mutations = {
   },
   setAccount(state, data) {
     state.account = data
+  },
+  setAccounts(state, data) {
+    state.accounts = data
   }
 };
 
