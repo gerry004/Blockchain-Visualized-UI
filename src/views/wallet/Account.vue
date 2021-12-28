@@ -4,8 +4,8 @@
     <v-card v-for="(account, i) in accounts" :key="i">
       <v-card-title>Balance: {{ account.balance }}</v-card-title>
       <v-card-text>
-        <p>Public Address: {{ account.public }}</p>
-        <p>Private Key: {{ account.private }}</p>
+        <p>Public Key: {{ account.publicKey }}</p>
+        <p>Private Key: {{ account.privateKey }}</p>
       </v-card-text>
       <v-card-actions>
         <v-btn text outlined @click="transactionDialog=true">Send</v-btn>
