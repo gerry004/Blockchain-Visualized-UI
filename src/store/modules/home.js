@@ -19,8 +19,15 @@ const actions = {
         commit('updateAccounts', response.data)
       })
   },
-  async signTransaction({ commit }, data) {
+  async signTransaction({ commit, dispatch }, data) {
     await api.post('/crypto/sign', data)
+      .then((response) => {
+        commit('setTransaction', response.data)
+        dispatch('verifyTransaction', response.data)
+      })
+  },
+  async verifyTransaction({ commit }, data) {
+    await api.post('/crypto/verify', data)
       .then((response) => {
         commit('setTransaction', response.data)
       })

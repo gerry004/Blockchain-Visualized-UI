@@ -4,8 +4,22 @@
     <v-card v-for="(account, i) in accounts" :key="i">
       <v-card-title>Balance: {{ account.balance }}</v-card-title>
       <v-card-text>
-        <p>Public Key: {{ account.publicKey }}</p>
-        <p>Private Key: {{ account.privateKey }}</p>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+              v-model="account.publicKey"
+              label="Public Key"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="account.privateKey"
+              label="Private Key"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-row>
       </v-card-text>
       <v-card-actions>
         <v-btn text outlined @click="openTransactionDialog(account.publicKey)">Send</v-btn>
