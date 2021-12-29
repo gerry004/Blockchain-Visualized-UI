@@ -8,11 +8,11 @@
         <p>Private Key: {{ account.privateKey }}</p>
       </v-card-text>
       <v-card-actions>
-        <v-btn text outlined @click="transactionDialog=true">Send</v-btn>
+        <v-btn text outlined @click="openTransactionDialog(account.publicKey)">Send</v-btn>
       </v-card-actions>
     </v-card>
     <v-row justify="center">
-      <v-dialog v-model="passphraseDialog" max-width="600px">
+      <v-dialog v-model="passphraseDialog" max-width="600px" persistent>
         <v-card>
           <v-card-title>
             Create An Account
@@ -50,63 +50,80 @@
         </v-card>
       </v-dialog>
     </v-row>
-  <!-- <v-row justify="center">
-    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="600px"
-    >
-      <v-card>
-        <v-card-title>
-          Send Funds
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="toAddress"
-                  label="To"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="accounts.public"
-                  label="From"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="amount"
-                  label="Amount"
-                  required
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
-            Close
-          </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="dialog = false"
-          >
-            Send
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-row> -->
+    <v-row justify="center">
+      <v-dialog
+        v-model="transactionDialog"
+        persistent
+        max-width="600px"
+      >
+        <v-card>
+          <v-card-title>
+            Send Funds
+          </v-card-title>
+          <v-card-text>
+            <v-container>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="fromAddress"
+                    label="From"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="toAddress"
+                    label="To"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="amount"
+                    label="Amount"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="9">
+                  <v-text-field
+                    v-model="passphrase"
+                    label="Passphrase"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="3">
+                  <v-btn @click="handleSignTransaction()">Sign</v-btn>
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-if="transaction.signature"
+                    v-model="transaction.signature"
+                    label="Signature"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="transactionDialog = false"
+            >
+              Close
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="transactionDialog = false"
+            >
+              Send
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
   </wallet-layout>
 </template>
 
@@ -121,17 +138,20 @@ export default {
     passphraseDialog: false,
     passphrase: null,
     transactionDialog: false,
+    fromAddress: null, 
     toAddress: null,
     amount: 0
   }),
   computed: {
     ...mapGetters({
-      accounts: 'home/accounts'
+      accounts: 'home/accounts',
+      transaction: 'home/transaction'
     })
   },
   methods: {
     ...mapActions({
-      createAccount: 'home/createAccount'
+      createAccount: 'home/createAccount',
+      signTransaction: 'home/signTransaction'
     }),
     handleCreateAccount() {
       if (this.passphrase) {
@@ -142,6 +162,19 @@ export default {
       else {
         console.log("Passphrase Is Required!")
       }
+    },
+    handleSignTransaction() {
+      const transactionData = {
+        passphrase: this.passphrase,
+        to: this.toAddress,
+        from: this.fromAddress,
+        amount: this.amount  
+      }
+      this.signTransaction(transactionData)
+    },
+    openTransactionDialog(publicKey) {
+      this.fromAddress = publicKey
+      this.transactionDialog = true
     },
     sendFunds() {
       console.log(this.toAddress)
