@@ -1,3 +1,4 @@
+import store from '@/store'
 const routes = [
   {
     path: '/',
@@ -8,6 +9,10 @@ const routes = [
     path: '/account',
     name: 'account',
     component: () => import('@/views/wallet/Account.vue'),
+    beforeEnter: async (to, _, next) => {
+      await store.dispatch('home/getAccounts')
+      next()
+    }
   },
   {
     path: '/transactions',

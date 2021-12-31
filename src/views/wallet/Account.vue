@@ -29,7 +29,7 @@
         </v-row>
       </v-card-text>
       <v-card-actions>
-        <v-btn text outlined @click="openTransactionDialog(account.publicKey)">Send</v-btn>
+        <v-btn text outlined @click="openTransactionDialog(account.username)">Send</v-btn>
       </v-card-actions>
     </v-card>
     <v-row justify="center">
@@ -43,7 +43,7 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="username"
-                  label="username"
+                  label="Username"
                   outlined
                   dense
                   required
