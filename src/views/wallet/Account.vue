@@ -7,6 +7,13 @@
         <v-row>
           <v-col cols="12">
             <v-text-field
+              v-model="account.username"
+              label="Username"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-text-field
               v-model="account.publicKey"
               label="Public Key"
               required
@@ -33,6 +40,15 @@
           </v-card-title>
           <v-card-text>
             <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="username"
+                  label="username"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="passphrase"
@@ -130,7 +146,7 @@
             <v-btn
               color="blue darken-1"
               text
-              @click="transactionDialog = false"
+              @click="send()"
             >
               Send
             </v-btn>
@@ -149,11 +165,12 @@ export default {
   name: 'Account',
   components: { WalletLayout },
   data: () => ({
+    username: null,
     passphraseDialog: false,
     passphrase: null,
     transactionDialog: false,
-    fromAddress: null, 
     toAddress: null,
+    fromAddress: null, 
     amount: 0
   }),
   computed: {
@@ -165,13 +182,15 @@ export default {
   methods: {
     ...mapActions({
       createAccount: 'home/createAccount',
-      signTransaction: 'home/signTransaction'
+      signTransaction: 'home/signTransaction',
+      sendFunds: 'home/sendFunds'
     }),
     handleCreateAccount() {
       if (this.passphrase) {
-        this.createAccount({ passphrase: this.passphrase })
+        this.createAccount({ username: this.username, passphrase: this.passphrase })
         this.passphraseDialog = false
         this.passphrase = null
+        this.username = null
       }
       else {
         console.log("Passphrase Is Required!")
@@ -190,11 +209,14 @@ export default {
       this.fromAddress = publicKey
       this.transactionDialog = true
     },
-    sendFunds() {
-      console.log(this.toAddress)
-      console.log(this.account)
-      console.log(this.amount)
-      this.dialog = false
+    send() {
+      if (this.transaction) {
+        this.sendFunds(this.transaction)
+        this.transactionDialog = false
+      }
+      else {
+        console.log('Sign Transaction Required')
+      }
     }
   }
 }

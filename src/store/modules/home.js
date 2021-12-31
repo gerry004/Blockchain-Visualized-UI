@@ -31,20 +31,19 @@ const actions = {
       .then((response) => {
         commit('setTransaction', response.data)
       })
+  },
+  async sendFunds({ dispatch }, data) {
+    await api.post('crypto/send', data)
+      .then(() => {
+        dispatch('getAccounts')
+      })
+  },
+  async getAccounts({ commit }) {
+    await api.get('crypto/accounts')
+      .then((response) => {
+        commit('setAccounts', response.data)
+      })
   }
-  // async getAccounts({ commit }) {
-  //   await api.get('crypto/accounts')
-  //     .then((response) => {
-  //       commit('setAccounts', response.data)
-  //     })
-  // },
-  // async sendFunds({ dispatch }, data) {
-  //   await api.post('crypto/send', data)
-  //     .then((response) => {
-  //       console.log(response.data)
-  //       dispatch('/home/getAccounts')
-  //     })
-  // }
 };
 
 const mutations = {
@@ -53,6 +52,9 @@ const mutations = {
   },
   setTransaction(state, data) {
     state.transaction = data
+  },
+  setAccounts(state, data) {
+    state.accounts = data
   }
 };
 
