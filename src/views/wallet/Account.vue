@@ -186,15 +186,10 @@ export default {
       sendFunds: 'home/sendFunds'
     }),
     handleCreateAccount() {
-      if (this.passphrase) {
-        this.createAccount({ username: this.username, passphrase: this.passphrase })
-        this.passphraseDialog = false
-        this.passphrase = null
-        this.username = null
-      }
-      else {
-        console.log("Passphrase Is Required!")
-      }
+      this.createAccount({ username: this.username, passphrase: this.passphrase })
+      this.passphraseDialog = false
+      this.passphrase = null
+      this.username = null
     },
     handleSignTransaction() {
       const transactionData = {
@@ -210,13 +205,8 @@ export default {
       this.transactionDialog = true
     },
     send() {
-      if (this.transaction) {
-        this.sendFunds(this.transaction)
-        this.transactionDialog = false
-      }
-      else {
-        console.log('Sign Transaction Required')
-      }
+      this.sendFunds(this.transaction)
+      this.transactionDialog = false
     }
   }
 }

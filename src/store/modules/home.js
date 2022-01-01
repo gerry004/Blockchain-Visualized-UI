@@ -18,6 +18,9 @@ const actions = {
       .then((response) => {
         commit('updateAccounts', response.data)
       })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   async signTransaction({ commit, dispatch }, data) {
     await api.post('/crypto/sign', data)
@@ -25,11 +28,17 @@ const actions = {
         commit('setTransaction', response.data)
         dispatch('verifyTransaction', response.data)
       })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   async verifyTransaction({ commit }, data) {
     await api.post('/crypto/verify', data)
       .then((response) => {
         commit('setTransaction', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   },
   async sendFunds({ dispatch }, data) {
@@ -37,11 +46,17 @@ const actions = {
       .then(() => {
         dispatch('getAccounts')
       })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   async getAccounts({ commit }) {
     await api.get('crypto/accounts')
       .then((response) => {
         commit('setAccounts', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   }
 };
